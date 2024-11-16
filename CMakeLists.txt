@@ -15,15 +15,17 @@ set(CUDA_ROOT /usr/local/cuda)
 
 # Include directories
 include_directories(${CUDA_ROOT}/include)
+include_directories(/home/sajith/lib/cuda-samples/Common)
 
 # Specify the source files
-file(GLOB SOURCES "*.cu")
 
 # Create the executable
-add_executable(streams.exe ${SOURCES})
+add_executable(streams.exe stream.cu stream.h)
+add_executable(mergesort.exe merge_sort.cu merge_sort.h)
 
 # Link CUDA libraries directly
 target_link_libraries(streams.exe ${CUDA_ROOT}/lib64/libcudart.so)
+target_link_libraries(mergesort.exe ${CUDA_ROOT}/lib64/libcudart.so)
 
 # Suppress deprecated GPU target warnings
 add_compile_options(-Wno-deprecated-gpu-targets)
