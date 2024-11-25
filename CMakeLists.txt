@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+{cmake_minimum_required(VERSION 3.10)
 
 # Enable CMP0104 to ensure CUDA architectures are set properly
 cmake_policy(SET CMP0104 NEW)
@@ -15,17 +15,28 @@ set(CUDA_ROOT /usr/local/cuda)
 
 # Include directories
 include_directories(${CUDA_ROOT}/include)
+include_directories(/usr/include)
 include_directories(/home/sajith/lib/cuda-samples/Common)
+include_directories(/home/sajith/lib/cuda-samples/Common/UtilNPP)
 
 # Specify the source files
 
 # Create the executable
 add_executable(streams.exe stream.cu stream.h)
 add_executable(mergesort.exe merge_sort.cu merge_sort.h)
+add_executable(gaussian_filter GaussianFilter.cu)
 
 # Link CUDA libraries directly
 target_link_libraries(streams.exe ${CUDA_ROOT}/lib64/libcudart.so)
 target_link_libraries(mergesort.exe ${CUDA_ROOT}/lib64/libcudart.so)
+#target_link_libraries(gaussian_filter ${CUDA_ROOT}/lib64/libcudart.so)
+
+target_link_libraries(gaussian_filter ${CUDA_ROOT}/lib64/libcudart.so
+/usr/lib/x86_64-linux-gnu/libfreeimage.so  # Adjust the path if necessary
+${CUDA_LIBRARIES}
+${CUDA_nppicc_LIBRARY}                     # NPP core library
+${CUDA_nppif_LIBRARY}                      # NPP filter library
+)
 
 # Suppress deprecated GPU target warnings
 add_compile_options(-Wno-deprecated-gpu-targets)
@@ -40,3 +51,4 @@ add_custom_target(run
         DEPENDS streams.exe
         COMMENT "Running streams.exe"
 )]]
+}
